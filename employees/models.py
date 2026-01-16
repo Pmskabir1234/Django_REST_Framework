@@ -16,3 +16,15 @@ class Item(models.Model):
 
     def __str__(self):
         return self.item_name
+
+class User(models.Model):
+    user_id = models.CharField(max_length=5)
+    user_name = models.CharField(max_length=40)
+    user_email = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.user_name
+    
+class Book(models.Model):
+    book_name = models.CharField(max_length=50)
+    book_price = models.FloatField(max_length=5)

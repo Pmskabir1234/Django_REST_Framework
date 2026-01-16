@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from .models import Student
-from employees.models import Employee, Item
-from .serializers import StudentSerializer, EmployeeSerializer, ItemSerializer
-from rest_framework.decorators import api_view
+from employees.models import Employee, Item, User, Book
+from .serializers import StudentSerializer, EmployeeSerializer, ItemSerializer, UserSerializer, BookSerializer
+from rest_framework.decorators import api_view      #for function based views
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.views import APIView            #for class based views
 from django.http import Http404
-from rest_framework import mixins, generics
-
+from rest_framework import mixins, generics         #for class based views using mixin and generics
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404      #to aceess models in viewset
 
 # Create your views here.
 @api_view(['GET','POST'])
@@ -90,7 +91,7 @@ class EmployeeDetail(APIView):
         detail.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#  Here we will be using Mixin and Generics to write the apis
+#  Here we will be using Mixins and Generics to write the apis
 class Items(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
@@ -100,3 +101,64 @@ class Items(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIV
     
     def put(self,request):
         return self.create(request)
+
+class ItemDetails(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  generics.GenericAPIView):
+    
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+    
+    def put(self,request,pk):
+        return self.update(request, pk)
+    
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
+
+
+#now we'll see more advanced and convenient way using Genereics
+class Users(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UsersDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'pk'         #because we want to get data based on primary key
+
+
+class Books(viewsets.ViewSet):
+    
+    def list(self,request):
+        queryset = Book.objects.all()
+        serializer = BookSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        book = get_object_or_404(Book, pk=pk)
+        serializer = BookSerializer(book)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def update(self, request, pk=None):
+        book = get_object_or_404(Book, pk=pk)
+        serializer = BookSerializer(book, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk=None):
+        book = get_object_or_404(pk=pk)
+        book.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
