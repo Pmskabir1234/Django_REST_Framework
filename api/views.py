@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from .models import Student
-from employees.models import Employee, Item, User, Book
-from .serializers import StudentSerializer, EmployeeSerializer, ItemSerializer, UserSerializer, BookSerializer
+from employees.models import Employee, Item, User, Book, Designation
+from .serializers import StudentSerializer, EmployeeSerializer, ItemSerializer, UserSerializer, BookSerializer, DesignationSerializer
 from rest_framework.decorators import api_view      #for function based views
 from rest_framework import status
 from rest_framework.views import APIView            #for class based views
@@ -131,6 +131,9 @@ class UsersDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'         #because we want to get data based on primary key
 
 
+#use of mixins and genrics needed 2 different classes for pk and non
+# based operations, viewset.ViewSet makes it easy to work in single class
+
 class Books(viewsets.ViewSet):
     
     def list(self,request):
@@ -162,3 +165,10 @@ class Books(viewsets.ViewSet):
         book = get_object_or_404(pk=pk)
         book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# use of ViewSet did everything in a single class but we had to write
+# a lot of code, so now we'll see ModelViewSet
+
+class DesgnationViewSet(viewsets.ModelViewSet):
+    queryset = Designation.objects.all()
+    serializer_class = DesignationSerializer

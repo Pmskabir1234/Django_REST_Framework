@@ -28,3 +28,13 @@ class User(models.Model):
 class Book(models.Model):
     book_name = models.CharField(max_length=50)
     book_price = models.FloatField(max_length=5)
+
+    def __str__(self):
+        return self.book_name
+
+class Designation(models.Model):
+    position = models.CharField(max_length=30)
+    salary = models.IntegerField(max_length=6)
+
+    def __str__(self):
+        return self.position

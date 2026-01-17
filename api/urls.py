@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter #for viewsets
 #urls for viewset
 router = DefaultRouter()
 router.register('books', views.Books, basename='books') #basename is used only for viewset.ViweSet
+router.register('designation',views.DesgnationViewSet)
 
 urlpatterns = [
     path('students/',views.student),
