@@ -10,6 +10,8 @@ from django.http import Http404
 from rest_framework import mixins, generics         #for class based views using mixin and generics
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404      #to aceess models in viewset
+from blog.models import Blog,Comment
+from blog.serializers import BlogSerializer,CommentSerializer
 
 # Create your views here.
 @api_view(['GET','POST'])
@@ -172,3 +174,12 @@ class Books(viewsets.ViewSet):
 class DesgnationViewSet(viewsets.ModelViewSet):
     queryset = Designation.objects.all()
     serializer_class = DesignationSerializer
+
+# now we'll work on the blog-comment to implement the nested serialzer
+class Blogs(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+class Comments(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

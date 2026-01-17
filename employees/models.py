@@ -34,7 +34,7 @@ class Book(models.Model):
 
 class Designation(models.Model):
     position = models.CharField(max_length=30)
-    salary = models.IntegerField(max_length=6)
+    salary = models.IntegerField()
 
     def __str__(self):
         return self.position
