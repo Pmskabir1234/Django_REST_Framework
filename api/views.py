@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404      #to aceess models in viewset
 from blog.models import Blog,Comment
 from blog.serializers import BlogSerializer,CommentSerializer
 from .paginaitons import CustomPagination
+from .filters import BlogFilter
 
 # Create your views here.
 @api_view(['GET','POST'])
@@ -184,6 +185,7 @@ class DesgnationViewSet(viewsets.ModelViewSet):
 class Blogs(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    filterset_class = BlogFilter
 
 class Comments(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
