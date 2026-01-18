@@ -134,6 +134,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE' : 1,
     'DEFAULT_FILTER_BACKENDS' : ['django_filters.rest_framework.DjangoFilterBackend'],
+    
+    # these two lines basically the key which will appear in the url when u search or order
+    'SEARCH_PARAM':'q',
+    'ORDER_PARAM':'order-by'
 }
 
 # Global filters only work with views that inherit from: ModelViewSet, ListAPIView, GenericAPIView, ReadOnlyModelViewSet
