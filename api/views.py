@@ -14,6 +14,7 @@ from blog.models import Blog,Comment
 from blog.serializers import BlogSerializer,CommentSerializer
 from .paginaitons import CustomPagination
 from .filters import BlogFilter, UserFilter
+from rest_framework.filters import SearchFilter,OrderingFilter
 
 # Create your views here.
 @api_view(['GET','POST'])
@@ -191,3 +192,6 @@ class Blogs(generics.ListCreateAPIView):
 class Comments(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['comment']
+    ordering_fields = ['id']
