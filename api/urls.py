@@ -18,6 +18,6 @@ urlpatterns = [
     path('users/<int:pk>/',views.UsersDetail.as_view()),  # .as_view() is required for class-based views
     path("", include(router.urls)),
     path('blogs/', views.Blogs.as_view()),
-    path('comments/',views.Comments.as_view())
+    path('comments/',views.Comments.as_view()),
 ]
 
