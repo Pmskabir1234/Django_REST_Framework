@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters', #pip install django_filter and added here
     'web',
     'api',
     'employees',
@@ -127,7 +128,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# the pagination, filter we declare in settings.py is DEFAULT pagination, filter
+# for custom pagination we cerate pagination.py inside apps
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE' : 1
+    'PAGE_SIZE' : 1,
+    'DEFAULT_FILTER_BACKENDS' : ['django_filters.rest_framework.DjangoFilterBackend'],
 }
+
+# Global filters only work with views that inherit from: ModelViewSet, ListAPIView, GenericAPIView, ReadOnlyModelViewSet

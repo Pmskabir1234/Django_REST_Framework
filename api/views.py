@@ -12,6 +12,7 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404      #to aceess models in viewset
 from blog.models import Blog,Comment
 from blog.serializers import BlogSerializer,CommentSerializer
+from .paginaitons import CustomPagination
 
 # Create your views here.
 @api_view(['GET','POST'])
@@ -124,6 +125,7 @@ class ItemDetails(mixins.RetrieveModelMixin,
 
 #now we'll see more advanced and convenient way using genereics
 class Users(generics.ListCreateAPIView):
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -175,6 +177,8 @@ class Books(viewsets.ViewSet):
 class DesgnationViewSet(viewsets.ModelViewSet):
     queryset = Designation.objects.all()
     serializer_class = DesignationSerializer
+    pagination_class = CustomPagination
+    filterset_fields = ['position']
 
 # now we'll work on the blog-comment to implement the nested serialzer
 class Blogs(generics.ListCreateAPIView):
