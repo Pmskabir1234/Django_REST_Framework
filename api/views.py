@@ -122,7 +122,7 @@ class ItemDetails(mixins.RetrieveModelMixin,
         return self.destroy(request, pk)
 
 
-#now we'll see more advanced and convenient way using Genereics
+#now we'll see more advanced and convenient way using genereics
 class Users(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -130,10 +130,11 @@ class Users(generics.ListCreateAPIView):
 class UsersDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = 'pk'         #because we want to get data based on primary key
+    #because we want to get data based on primary key
+    lookup_field = 'pk'         
 
 
-#use of mixins and genrics needed 2 different classes for pk and non
+# use of mixins and genrics needed 2 different classes for pk and non
 # based operations, viewset.ViewSet makes it easy to work in single class
 
 class Books(viewsets.ViewSet):
