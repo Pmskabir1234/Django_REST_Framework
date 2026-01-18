@@ -6,10 +6,11 @@ from employees.models import User
 class BlogFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(field_name='blog_title',lookup_expr='iexact')
     # use of iexact in lookup_expr handles the case insenivity
+    id = django_filters.RangeFilter(field_name='id')
 
     class Meta:
         model = Blog
-        fields = ['title']
+        fields = ['id','title']
 
 
 class UserFilter(django_filters.FilterSet):
