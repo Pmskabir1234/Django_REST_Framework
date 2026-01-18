@@ -14,11 +14,23 @@ class BlogFilter(django_filters.FilterSet):
 
 
 class UserFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(field_name='user_name', lookup_expr='icontains')
-    email = django_filters.CharFilter(field_name ='user_email', lookup_expr='icontains')
+    name = django_filters.CharFilter(field_name='user_name', lookup_expr='icontains', label='Username')
+    email = django_filters.CharFilter(field_name ='user_email', lookup_expr='icontains', label='User Email')
     # use of icontains helps searching on the basis of substring presence
+
+    #now we'll see how to use strings(user_id) as filter
+    uid_min = django_filters.CharFilter(method='myfilter', label = 'From User ID')
+    uid_max = django_filters.CharFilter(method='myfilter', label = 'To User ID')
+
 
     class Meta:
         model = User
-        fields = ['name','email']
+        fields = ['name','email','uid_min','uid_max']
+
+    def myfilter(self,queryset,name,value):
+        if name == 'uid_min':
+            return queryset.filter(user_id__gte=value)
+        elif name == 'uid_max':
+            return queryset.filter(user_id__lte=value)
+        return queryset
     
